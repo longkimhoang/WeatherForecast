@@ -1,5 +1,12 @@
 load("//Config:configs.bzl", "app_binary_configs", "info_plist_substitutions", "library_configs")
 
+apple_asset_catalog(
+    name = "WeatherForecastAppAssets",
+    app_icon = "AppIcon",
+    visibility = ["//App:"],
+    dirs = ["Assets.xcassets"],
+)
+
 apple_library(
     name = "WeatherForecastLibrary",
     configs = library_configs(),
@@ -17,6 +24,9 @@ apple_library(
         "//App/Resources:Storyboard",
         "//App/Resources:Strings",
         "//App/Resources:XIBs",
+
+        # Assets
+        ":WeatherForecastAppAssets",
     ],
     visibility = [
         "//App:",
