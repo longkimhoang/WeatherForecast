@@ -1,0 +1,14 @@
+load("//Config:buck_rule_macros.bzl", "apple_third_party_lib")
+
+apple_third_party_lib(
+    name = "AlamofireImage",
+    deps = [
+        "//Vendor/Alamofire:Alamofire",
+    ],
+    srcs = glob(["Sources/**/*.swift"]),
+    frameworks = [
+        "$SDKROOT/System/Library/Frameworks/UIKit.framework",
+        "$SDKROOT/System/Library/Frameworks/Foundation.framework",
+    ],
+    licenses = ["LICENSE"],
+)

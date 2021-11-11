@@ -1,0 +1,23 @@
+apple_resource(
+    name = "Storyboard",
+    variants = glob([
+        "*.lproj/*.storyboard",
+    ]),
+    visibility = ["//App:"],
+)
+
+apple_resource(
+    name = "Strings",
+    variants = glob([
+        "*.lproj/Main.strings",
+    ]),
+    visibility = ["//App:"],
+)
+
+apple_resource(
+    name = "XIBs",
+    variants = glob([
+        "*.lproj/*.xib",
+    ]),
+    visibility = ["//App:"],
+)

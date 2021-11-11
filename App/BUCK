@@ -1,0 +1,53 @@
+load("//Config:configs.bzl", "app_binary_configs", "info_plist_substitutions", "library_configs")
+
+apple_library(
+    name = "WeatherForecastLibrary",
+    configs = library_configs(),
+    srcs = [
+        "AppDelegate.swift",
+    ],
+    deps = [
+        # First party dependecies
+        "//Libraries/WeatherForecastUI:WeatherForecastUI",
+
+        # Third party dependecies
+        "//Vendor/SwinjectStoryboard:SwinjectStoryboard",
+
+        # Resources
+        "//App/Resources:Storyboard",
+        "//App/Resources:Strings",
+        "//App/Resources:XIBs",
+    ],
+    visibility = [
+        "//App:",
+        "//App/...",
+    ],
+)
+
+apple_binary(
+    name = "WeatherForecastBinary",
+    configs = app_binary_configs("WeatherForecast"),
+    deps = [
+        ":WeatherForecastLibrary",
+    ],
+    srcs = [
+        "BuckSupportFiles/Dummy.swift",
+    ],
+    frameworks = [
+        "$SDKROOT/System/Library/Frameworks/UIKit.framework",
+        "$SDKROOT/System/Library/Frameworks/Foundation.framework",
+    ],
+)
+
+apple_bundle(
+    name = "WeatherForecast",
+    extension = "app",
+    binary = ":WeatherForecastBinary",
+    info_plist = "Info.plist",
+    info_plist_substitutions = info_plist_substitutions("WeatherForecast"),
+)
+
+apple_package(
+    name = "WeatherForecastPackage",
+    bundle = ":WeatherForecast",
+)

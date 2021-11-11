@@ -1,0 +1,11 @@
+load("//Config:buck_rule_macros.bzl", "apple_third_party_lib")
+
+apple_third_party_lib(
+    name = "DifferenceKit",
+    srcs = glob(["Sources/**/*.swift"]),
+    visibility = [
+        "//Vendor/DiffableDataSources:DiffableDataSources",
+        "//Libraries/...",
+    ],
+    licenses = ["LICENSE"],
+)

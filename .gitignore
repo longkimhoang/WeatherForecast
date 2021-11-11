@@ -1,0 +1,29 @@
+.DS_Store
+
+# Buck
+buck-out
+.buckd
+
+# Buck binary
+tools/buck
+
+# Xcode
+**/xcuserdata/
+**/*.xcodeproj
+**/*.xcworkspace
+
+# Make
+*.d
+
+# Build
+build/
+
+# DAG chart generated
+result.dot
+result.png
+
+# Audit rules output
+Config/Gen/*.py
+
+# VS Code
+.vscode

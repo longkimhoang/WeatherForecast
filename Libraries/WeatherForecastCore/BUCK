@@ -1,0 +1,15 @@
+load("//Config:buck_rule_macros.bzl", "first_party_library")
+
+first_party_library(
+    name = "WeatherForecastCore",
+    deps = [
+        "//Libraries/WeatherForecastNetworking:WeatherForecastNetworking",
+        "//Vendor/AlamofireImage:AlamofireImage",
+    ],
+    test_deps = [
+        "//Vendor/Swinject:Swinject",
+    ],
+    frameworks = [
+        "$SDKROOT/System/Library/Frameworks/Foundation.framework",
+    ],
+)

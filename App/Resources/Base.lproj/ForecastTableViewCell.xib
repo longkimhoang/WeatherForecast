@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ForecastTableViewCell"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="244" id="KGk-i7-Jjw" customClass="ForecastTableViewCell" customModule="WeatherForecastUI">
+            <rect key="frame" x="0.0" y="0.0" width="361" height="244"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="361" height="244"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="4Oj-lI-SyY">
+                        <rect key="frame" x="20" y="11" width="257" height="222"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date: Wed, 11 Nov 2021" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XzO-S5-8c1">
+                                <rect key="frame" x="0.0" y="0.0" width="179.5" height="38"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Average Temperature: 30C" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FYu-5S-37u">
+                                <rect key="frame" x="0.0" y="46" width="204.5" height="38"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pressure: 1021" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oWq-FZ-dZB">
+                                <rect key="frame" x="0.0" y="92" width="111" height="38"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Humidity: 58%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w2U-GE-eGx">
+                                <rect key="frame" x="0.0" y="138" width="113" height="38"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description: few clouds" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p47-X2-nIz">
+                                <rect key="frame" x="0.0" y="184" width="178.5" height="38"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                    </stackView>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dIK-MQ-2XE">
+                        <rect key="frame" x="293" y="98" width="48" height="48"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="48" id="H1Y-5f-jyS"/>
+                            <constraint firstAttribute="width" constant="48" id="NVj-Fb-kKY"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="dIK-MQ-2XE" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="3zb-bh-9Zs"/>
+                    <constraint firstItem="dIK-MQ-2XE" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="NXg-wj-b42"/>
+                    <constraint firstAttribute="topMargin" secondItem="4Oj-lI-SyY" secondAttribute="top" id="VLl-pI-hdS"/>
+                    <constraint firstItem="4Oj-lI-SyY" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="kdW-jV-GOS"/>
+                    <constraint firstItem="4Oj-lI-SyY" firstAttribute="trailing" secondItem="dIK-MQ-2XE" secondAttribute="leading" constant="-16" id="nSD-lY-16h"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="4Oj-lI-SyY" secondAttribute="bottom" id="z9b-NQ-hKL"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="dateLabel" destination="XzO-S5-8c1" id="P5a-xU-RUg"/>
+                <outlet property="descriptionLabel" destination="p47-X2-nIz" id="Udk-YW-lH3"/>
+                <outlet property="humidityLabel" destination="w2U-GE-eGx" id="CLd-a6-e6i"/>
+                <outlet property="iconImageView" destination="dIK-MQ-2XE" id="Qpf-oj-mOy"/>
+                <outlet property="pressureLabel" destination="oWq-FZ-dZB" id="abp-f4-NYQ"/>
+                <outlet property="temperatureLabel" destination="FYu-5S-37u" id="NSL-5b-57Y"/>
+            </connections>
+            <point key="canvasLocation" x="161.59420289855075" y="131.91964285714286"/>
+        </tableViewCell>
+    </objects>
+</document>

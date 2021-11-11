@@ -1,0 +1,13 @@
+load("//Config:buck_rule_macros.bzl", "first_party_library")
+
+first_party_library(
+    name = "WeatherForecastUI",
+    deps = [
+        "//Libraries/WeatherForecastCore:WeatherForecastCore",
+        "//Vendor/DiffableDataSources:DiffableDataSources",
+    ],
+    frameworks = [
+        "$SDKROOT/System/Library/Frameworks/UIKit.framework",
+        "$SDKROOT/System/Library/Frameworks/Foundation.framework",
+    ],
+)
