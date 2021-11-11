@@ -5,6 +5,7 @@ first_party_library(
     deps = [
         "//Libraries/WeatherForecastCore:WeatherForecastCore",
         "//Vendor/DiffableDataSources:DiffableDataSources",
+        "//Vendor/Toast:Toast",
     ],
     frameworks = [
         "$SDKROOT/System/Library/Frameworks/UIKit.framework",

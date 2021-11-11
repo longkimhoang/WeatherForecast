@@ -1,0 +1,7 @@
+load("//Config:buck_rule_macros.bzl", "apple_third_party_lib")
+
+apple_third_party_lib(
+    name = "Toast",
+    srcs = ["Toast.swift"],
+    licenses = ["LICENSE"],
+)
