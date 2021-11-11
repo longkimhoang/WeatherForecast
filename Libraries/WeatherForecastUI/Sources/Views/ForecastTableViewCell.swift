@@ -36,7 +36,7 @@ public class ForecastTableViewCell: UITableViewCell {
     func update(
         with model: WeatherForecastModel,
         using dataProvider: WeatherForecastViewDataProviding,
-        completionHandler: @escaping (WeatherForecastModel) -> Void
+        completionHandler: @escaping () -> Void
     ) {
         dateLabel.text = "Date: \(dateFormatter.string(from: model.date))"
         temperatureLabel.text =
@@ -58,7 +58,7 @@ public class ForecastTableViewCell: UITableViewCell {
 
                 // Just request reload cell, image will be in cache by now
                 // meaning this code path will not be reached.
-                completionHandler(model)
+                completionHandler()
             }
         }
     }

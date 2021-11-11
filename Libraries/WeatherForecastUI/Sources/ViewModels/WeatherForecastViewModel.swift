@@ -22,6 +22,10 @@ public protocol WeatherForecastViewDataProviding: AnyObject {
 }
 
 public protocol WeatherForecastViewDataProvidingDelegate: AnyObject {
+    func weatherForecastDataProviderDidBeginFetching(
+        _ provider: WeatherForecastViewDataProviding
+    )
+
     func weatherForecastDataProvider(
         _ provider: WeatherForecastViewDataProviding,
         didUpdateForecastDataFrom oldModels: [WeatherForecastModel],
@@ -50,6 +54,8 @@ public final class WeatherForecastViewModel: WeatherForecastViewDataProviding {
     }
 
     public func fetchWeatherForecasts(for city: String) {
+        delegate?.weatherForecastDataProviderDidBeginFetching(self)
+
         forecastDataProvider.fetchWeatherForecasts(for: city) { [weak self] result in
             guard let self = self else {
                 return

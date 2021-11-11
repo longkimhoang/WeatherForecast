@@ -35,3 +35,9 @@ public struct WeatherForecastModel: Hashable {
     public let weatherDescription: String
     public let iconName: String
 }
+
+extension WeatherForecastModel: Identifiable {
+    public var id: String {
+        "\(city)-\(date.timeIntervalSince1970)"
+    }
+}

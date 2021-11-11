@@ -7,6 +7,7 @@
 
 import DiffableDataSources
 import Foundation
+import Toast
 import UIKit
 import WeatherForecastCore
 import WeatherForecastNetworking
@@ -28,10 +29,10 @@ public final class RootViewController: UIViewController {
     }()
 
     public var viewModel: WeatherForecastViewDataProviding!
-    var dataSource: TableViewDiffableDataSource<Section, WeatherForecastModel>!
+    var dataSource: TableViewDiffableDataSource<Section, WeatherForecastModel.ID>!
 
     var forecastNotFoundNib = UINib(nibName: "ForecastNotFoundView", bundle: nil)
-    
+
     private var sema = DispatchSemaphore(value: 0)
 
     public override func viewDidLoad() {
@@ -52,7 +53,7 @@ public final class RootViewController: UIViewController {
         // Setup data source
         dataSource = .init(
             tableView: forecastsTableView,
-            cellProvider: tableView(_:cellForItemAtIndexPath:withItem:)
+            cellProvider: tableView(_:cellForItemAtIndexPath:withItemIdentifier:)
         )
 
         // Initial data
@@ -69,28 +70,36 @@ extension RootViewController: WeatherForecastViewDataProvidingDelegate {
     func tableView(
         _ tableView: UITableView,
         cellForItemAtIndexPath indexPath: IndexPath,
-        withItem model: WeatherForecastModel
+        withItemIdentifier id: WeatherForecastModel.ID
     ) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(
             withIdentifier: ForecastTableViewCell.cellIdentifier,
             for: indexPath
         )
 
+        let model = viewModel.forecasts[indexPath.row]
+
         if let forecastCell = cell as? ForecastTableViewCell {
-            forecastCell.update(with: model, using: viewModel) { [weak self] model in
-                self?.itemsDidUpdate(CollectionOfOne(model))
+            forecastCell.update(with: model, using: viewModel) { [weak self] in
+                self?.itemsWithIdentifiersDidUpdate(CollectionOfOne(id))
             }
         }
 
         return cell
     }
 
-    private func itemsDidUpdate<C: Collection>(_ items: C)
-    where C.Element == WeatherForecastModel {
+    private func itemsWithIdentifiersDidUpdate<C: Collection>(_ ids: C)
+    where C.Element == WeatherForecastModel.ID {
         var snapshot = dataSource.snapshot()
-        snapshot.reloadItems(Array(items))
+        snapshot.reloadItems(Array(ids))
 
         dataSource.apply(snapshot)
+    }
+
+    public func weatherForecastDataProviderDidBeginFetching(
+        _ provider: WeatherForecastViewDataProviding
+    ) {
+        view.makeToastActivity(.center)
     }
 
     public func weatherForecastDataProvider(
@@ -99,10 +108,11 @@ extension RootViewController: WeatherForecastViewDataProvidingDelegate {
         to models: [WeatherForecastModel]
     ) {
         forecastsTableView.backgroundView = nil
-        
+        view.hideToastActivity()
+
         var snapshot = dataSource.snapshot()
-        snapshot.deleteItems(oldModels)
-        snapshot.appendItems(models, toSection: .main)
+        snapshot.deleteItems(oldModels.map(\.id))
+        snapshot.appendItems(models.map(\.id), toSection: .main)
 
         dataSource.apply(snapshot)
     }
@@ -111,6 +121,8 @@ extension RootViewController: WeatherForecastViewDataProvidingDelegate {
         _ provider: WeatherForecastViewDataProviding,
         didFailFetchingWithError error: Error
     ) {
+        view.hideToastActivity()
+        
         switch error {
         case WeatherForecastClientError.notFound(let message):
             showNotFoundErrorScreen(message: message)
