@@ -127,7 +127,7 @@ extension RootViewController: WeatherForecastViewDataProvidingDelegate {
         case WeatherForecastClientError.notFound(let message):
             showNotFoundErrorScreen(message: message)
         default:
-            break
+            showGenericErrorScreen(error: error)
         }
     }
 
@@ -145,6 +145,25 @@ extension RootViewController: WeatherForecastViewDataProvidingDelegate {
                 as? ForecastNotFoundView
             {
                 notFoundView.setMessage(message)
+                self?.forecastsTableView.backgroundView = notFoundView
+            }
+        }
+    }
+    
+    private func showGenericErrorScreen<E: Error>(error: E) {
+        // Remove current items
+        var snapshot = dataSource.snapshot()
+        snapshot.deleteAllItems()
+        dataSource.apply(snapshot) { [weak self] in
+            // Instantiate not found screen
+            if let notFoundView =
+                self?.forecastNotFoundNib.instantiate(
+                    withOwner: nil,
+                    options: nil
+                ).first
+                as? ForecastNotFoundView
+            {
+                notFoundView.setError(error)
                 self?.forecastsTableView.backgroundView = notFoundView
             }
         }

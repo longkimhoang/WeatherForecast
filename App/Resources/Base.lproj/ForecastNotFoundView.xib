@@ -15,8 +15,15 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Error" translatesAutoresizingMaskIntoConstraints="NO" id="LCZ-sN-ScB">
+                    <rect key="frame" x="167" y="357" width="80" height="80"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="80" id="DXo-h0-Mon"/>
+                        <constraint firstAttribute="width" constant="80" id="afZ-m9-MYi"/>
+                    </constraints>
+                </imageView>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="tTZ-he-6pT">
-                    <rect key="frame" x="16" y="413" width="382" height="80"/>
+                    <rect key="frame" x="16" y="453" width="382" height="80"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Forecast not found" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6J6-eB-K0k">
                             <rect key="frame" x="91" y="0.0" width="200.5" height="40"/>
@@ -40,16 +47,20 @@
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="tTZ-he-6pT" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" constant="-16" id="9Ei-rZ-F33"/>
-                <constraint firstItem="tTZ-he-6pT" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="9cA-6l-p2s"/>
+                <constraint firstItem="tTZ-he-6pT" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" constant="40" id="9cA-6l-p2s"/>
+                <constraint firstItem="LCZ-sN-ScB" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="bmG-Iw-S07"/>
                 <constraint firstItem="tTZ-he-6pT" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="h7F-c8-XJk"/>
+                <constraint firstItem="LCZ-sN-ScB" firstAttribute="bottom" secondItem="tTZ-he-6pT" secondAttribute="top" constant="-16" id="zx4-Rm-zl6"/>
             </constraints>
             <connections>
+                <outlet property="calloutLabel" destination="6J6-eB-K0k" id="eRp-D0-K0N"/>
                 <outlet property="messageLabel" destination="KEO-w7-7p1" id="BnJ-sR-6gB"/>
             </connections>
             <point key="canvasLocation" x="137.68115942028987" y="-12.053571428571429"/>
         </view>
     </objects>
     <resources>
+        <image name="Error" width="170.5" height="170.5"/>
         <systemColor name="secondaryLabelColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
