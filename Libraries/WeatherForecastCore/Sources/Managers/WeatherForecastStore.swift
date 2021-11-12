@@ -12,6 +12,8 @@ public typealias NetworkError = WeatherForecastNetworking.HttpClientError
 
 /// A type that provides weather forecast data.
 public protocol WeatherForecastDataProviding {
+    var forecasts: [WeatherForecastModel] { get }
+    
     func fetchWeatherForecasts(
         for city: String,
         completionHandler: @escaping (Result<[WeatherForecastModel], Error>) -> Void
@@ -21,6 +23,7 @@ public protocol WeatherForecastDataProviding {
 /// A concrete weather forecast data provider.
 public final class WeatherForecastStore: WeatherForecastDataProviding {
     public let client: WeatherForecastClient
+    public private(set) var forecasts: [WeatherForecastModel] = []
 
     public init(client: WeatherForecastClient) {
         self.client = client
@@ -30,12 +33,16 @@ public final class WeatherForecastStore: WeatherForecastDataProviding {
         for city: String,
         completionHandler: @escaping (Result<[WeatherForecastModel], Error>) -> Void
     ) {
-        client.getWeatherForecasts(for: city) { response in
+        client.getWeatherForecasts(for: city) { [weak self] response in
             let result =
                 response
                 .map { Array(apiResponse: $0) }
                 .mapError { $0 as Error }
 
+            if case .success(let forecasts) = result {
+                self?.forecasts = forecasts
+            }
+            
             completionHandler(result)
         }
     }

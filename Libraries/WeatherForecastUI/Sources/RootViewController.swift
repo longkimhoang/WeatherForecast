@@ -77,7 +77,7 @@ extension RootViewController: WeatherForecastViewDataProvidingDelegate {
             for: indexPath
         )
 
-        let model = viewModel.forecasts[indexPath.row]
+        let model = viewModel.forecastDataProvider.forecasts[indexPath.row]
 
         if let forecastCell = cell as? ForecastTableViewCell {
             forecastCell.update(with: model, using: viewModel) { [weak self] in
@@ -104,17 +104,15 @@ extension RootViewController: WeatherForecastViewDataProvidingDelegate {
 
     public func weatherForecastDataProvider(
         _ provider: WeatherForecastViewDataProviding,
-        didUpdateForecastDataFrom oldModels: [WeatherForecastModel],
-        to models: [WeatherForecastModel]
-    ) {
-        forecastsTableView.backgroundView = nil
-        view.hideToastActivity()
-
-        var snapshot = dataSource.snapshot()
-        snapshot.deleteItems(oldModels.map(\.id))
-        snapshot.appendItems(models.map(\.id), toSection: .main)
-
-        dataSource.apply(snapshot)
+        didUpdateForecastDataWith models: [WeatherForecastModel]) {
+            forecastsTableView.backgroundView = nil
+            view.hideToastActivity()
+            
+            var snapshot = DiffableDataSourceSnapshot<Section, WeatherForecastModel.ID>()
+            snapshot.appendSections([.main])
+            snapshot.appendItems(models.map(\.id), toSection: .main)
+            
+            dataSource.apply(snapshot)
     }
 
     public func weatherForecastDataProvider(

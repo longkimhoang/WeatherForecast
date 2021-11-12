@@ -10,9 +10,11 @@ import UIKit
 import WeatherForecastCore
 
 public protocol WeatherForecastViewDataProviding: AnyObject {
+    var forecastDataProvider: WeatherForecastDataProviding { get }
+    
+    var weatherIconProvider: WeatherIconProviding { get }
+    
     var delegate: WeatherForecastViewDataProvidingDelegate? { get set }
-
-    var forecasts: [WeatherForecastModel] { get }
 
     func fetchWeatherForecasts(for city: String)
 
@@ -28,8 +30,7 @@ public protocol WeatherForecastViewDataProvidingDelegate: AnyObject {
 
     func weatherForecastDataProvider(
         _ provider: WeatherForecastViewDataProviding,
-        didUpdateForecastDataFrom oldModels: [WeatherForecastModel],
-        to models: [WeatherForecastModel]
+        didUpdateForecastDataWith models: [WeatherForecastModel]
     )
 
     func weatherForecastDataProvider(
@@ -42,8 +43,6 @@ public final class WeatherForecastViewModel: WeatherForecastViewDataProviding {
     public let forecastDataProvider: WeatherForecastDataProviding
     public let weatherIconProvider: WeatherIconProviding
     weak public var delegate: WeatherForecastViewDataProvidingDelegate?
-
-    private(set) public var forecasts = [WeatherForecastModel]()
 
     public init(
         forecastDataProvider: WeatherForecastDataProviding,
@@ -64,12 +63,9 @@ public final class WeatherForecastViewModel: WeatherForecastViewDataProviding {
             switch result {
             case .success(let forecasts):
                 DispatchQueue.main.async {
-                    let oldForecasts = self.forecasts
-                    self.forecasts = forecasts
                     self.delegate?.weatherForecastDataProvider(
                         self,
-                        didUpdateForecastDataFrom: oldForecasts,
-                        to: forecasts
+                        didUpdateForecastDataWith: forecasts
                     )
                 }
             case .failure(let error):
