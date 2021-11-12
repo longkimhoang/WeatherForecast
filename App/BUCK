@@ -1,4 +1,11 @@
 load("//Config:configs.bzl", "app_binary_configs", "info_plist_substitutions", "library_configs")
+load("//Config:buck_rule_macros.bzl", "apple_test_all")
+
+first_party_dependencies = [
+    "//Libraries/WeatherForecastUI:WeatherForecastUI",
+    "//Libraries/WeatherForecastCore:WeatherForecastCore",
+    "//Libraries/WeatherForecastNetworking:WeatherForecastNetworking",
+]
 
 apple_asset_catalog(
     name = "WeatherForecastAppAssets",
@@ -32,6 +39,11 @@ apple_library(
         "//App:",
         "//App/...",
     ],
+)
+
+apple_test_all(
+    name = "WeatherForecastAppTests",
+    libraries = first_party_dependencies,
 )
 
 apple_binary(

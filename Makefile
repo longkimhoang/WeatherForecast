@@ -1,7 +1,10 @@
-.PHONY: install_buck build targets debug clean project
+.PHONY: install_buck build targets test audit debug clean project
 
 # Use local version of Buck
 BUCK = tools/buck
+
+# Simulator name
+SIMULATOR_NAME = 'iPhone 8'
 
 install_buck:
 	curl https://jitpack.io/com/github/airbnb/buck/f2865fec86dbe982ce1f237494f10b65bce3d270/buck-f2865fec86dbe982ce1f237494f10b65bce3d270-java11.pex --output tools/buck
@@ -14,13 +17,17 @@ build_release:
 	$(BUCK) build //App:WeatherForecast --config-file ./BuildConfigurations/Release.buckconfig
 
 debug:
-	$(BUCK) install //App:WeatherForecast --run
+	$(BUCK) install //App:WeatherForecast --run --simulator-name $(SIMULATOR_NAME)
 
 debug_release:
-	$(BUCK) install //App:WeatherForecast --run --config-file ./BuildConfigurations/Release.buckconfig
+	$(BUCK) install //App:WeatherForecast --run --config-file ./BuildConfigurations/Release.buckconfig --simulator-name $(SIMULATOR_NAME)
 
 targets:
 	$(BUCK) targets //...
+
+buck_out = $(shell $(BUCK) root)/buck-out
+test:
+	$(BUCK) test //App:WeatherForecastAppTests
 
 audit:
 	$(BUCK) audit rules App/BUCK > Config/Gen/App-BUCK.py
