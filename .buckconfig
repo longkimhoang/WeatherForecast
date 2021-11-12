@@ -20,6 +20,7 @@
   provisioning_profile_read_command = security cms -Di
   xctool_default_destination_specifier = platform=iOS Simulator,OS=latest
   xctool_path = tools/xctool/bin/xctool
+  default_debug_info_format_for_binaries = NONE
 
 [parser]
   polyglot_parsing_enabled = true

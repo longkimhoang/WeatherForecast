@@ -1,3 +1,6 @@
+[apple]
+  default_debug_info_format_for_binaries = DWARF_AND_DSYM
+
 [custom]
   config = release
   optimization = -Osize
