@@ -27,3 +27,6 @@ Config/Gen/*.py
 
 # VS Code
 .vscode
+
+# Coverage report
+coverage

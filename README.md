@@ -60,8 +60,13 @@ The main modules are:
 -   ~~Design app's architecture (MVC or MVP, MVVM).~~
 -   ~~UI should be looks like in attachment.~~
 -   Write UnitTests (nice to have).
-    -   ~~Networking Code~~
-    -   ~~Weather Forecast Fetching Logic~~
+
+    -   Networking Code
+    -   Weather Forecast Fetching Logic
     -   UI Test
+
+    Current coverage:
+    ![Coverage](docs/coverage.png)
+
 -   ~~Exception handling (optional).~~ The app can handle cases where city is not found, and a generic error case.
 -   ~~`README` file is included.~~

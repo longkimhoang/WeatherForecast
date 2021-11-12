@@ -1,4 +1,4 @@
-.PHONY: install_buck build targets test audit debug clean project
+.PHONY: install_buck build targets test coverage audit debug clean project
 
 # Use local version of Buck
 BUCK = tools/buck
@@ -26,8 +26,18 @@ targets:
 	$(BUCK) targets //...
 
 buck_out = $(shell $(BUCK) root)/buck-out
+TEST_BUNDLE = $(shell $(BUCK) targets //App:WeatherForecastAppTests --show-output | awk '{ print $$2 }')
 test:
-	$(BUCK) test //App:WeatherForecastAppTests
+	@rm -f $(buck_out)/tmp/*.profraw
+	@rm -f $(buck_out)/gen/*.profdata
+	$(BUCK) test //App:WeatherForecastAppTests --test-runner-env XCTOOL_TEST_ENV_LLVM_PROFILE_FILE="$(buck_out)/tmp/code-%p.profraw%15x" \
+		--config-file code_coverage.buckconfig
+	xcrun llvm-profdata merge -sparse "$(buck_out)/tmp/code-"*.profraw -o "$(buck_out)/gen/Coverage.profdata"
+	xcrun llvm-cov report "$(TEST_BUNDLE)/WeatherForecastAppTests" -instr-profile "$(buck_out)/gen/Coverage.profdata" -ignore-filename-regex "Vendor|buck-out"
+
+coverage: test
+	xcrun llvm-cov show -format=html -output-dir=coverage "$(TEST_BUNDLE)/WeatherForecastAppTests" -instr-profile "$(buck_out)/gen/Coverage.profdata" -ignore-filename-regex "Vendor|buck-out"
+	open coverage/index.html
 
 audit:
 	$(BUCK) audit rules App/BUCK > Config/Gen/App-BUCK.py
