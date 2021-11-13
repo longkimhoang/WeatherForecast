@@ -30,18 +30,17 @@ jobs:
       run: make install_buck
       if: steps.cache-buck.outputs.cache-hit != 'true'
       
-    - name: Download buck build artifacts
-      uses: actions/download-artifact@v2
+    - name: Cache buck build artifacts
+      uses: actions/cache@v2
+      env:
+        cache-name: cache-buck-out
       with:
-        name: buck-artifacts
         path: buck-out
-      continue-on-error: true # Can fail if no artifacts present
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ github.sha }} # Force cache miss so that build artifacts are always saved and restored
+        restore-keys: |
+           ${{ runner.os }}-build-${{ env.cache-name }}-
+           ${{ runner.os }}-build-
+           ${{ runner.os }}-
       
     - name: Run tests
       run: make test
-      
-    - name: Upload buck build artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: buck-artifacts
-        path: buck-out
