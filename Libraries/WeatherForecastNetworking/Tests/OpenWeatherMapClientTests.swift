@@ -20,6 +20,12 @@ let errorJson =
     {"cod": "404", "message": "city not found"}
     """
 
+final class DummyHttpRequest: HttpClientRequest {
+    func cancel() {
+        // Do nothing
+    }
+}
+
 struct DummyHttpClient: HttpClient {
     let decoder = JSONDecoder()
 
@@ -28,16 +34,18 @@ struct DummyHttpClient: HttpClient {
         parameters: P,
         of type: T.Type,
         completionHandler: @escaping (HttpClientResponse<T>) -> Void
-    ) where U: URLConvertible, P: Encodable, T: Decodable {
+    ) -> HttpClientRequest where U: URLConvertible, P: Encodable, T: Decodable {
+        let request = DummyHttpRequest()
+        
         // We will provide specializations for ease of testing
         guard type is OpenWeatherMapResponse.Type else {
-            return
+            return request
         }
 
         guard let jsonData = dummyJson.data(using: .utf8),
             let responseData = try? decoder.decode(OpenWeatherMapResponse.self, from: jsonData)
         else {
-            return
+            return request
         }
 
         var cityNotFound = false
@@ -61,6 +69,7 @@ struct DummyHttpClient: HttpClient {
         )
 
         completionHandler(response as! HttpClientResponse<T>)
+        return request
     }
 }
 

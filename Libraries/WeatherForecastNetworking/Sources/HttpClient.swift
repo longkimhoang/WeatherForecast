@@ -12,7 +12,9 @@ import Foundation
 public typealias HttpClientError = AFError
 
 /// A type representing a HTTP client request.
-public typealias HttpClientRequest = DataRequest
+public protocol HttpClientRequest: AnyObject {
+    func cancel()
+}
 
 /// A type representing a HTTP client response.
 public typealias HttpClientResponse<T: Decodable> = DataResponse<T, HttpClientError>
@@ -62,5 +64,11 @@ public struct AlamoFireHTTPClient: HttpClient {
                 response in
                 completionHandler(response)
             }
+    }
+}
+
+extension DataRequest: HttpClientRequest {
+    public func cancel() {
+        (self as Request).cancel()
     }
 }

@@ -15,12 +15,24 @@ import XCTest
 private let container = Container()
 private let date = Date()
 
+struct DummyWeatherForecastRequest: WeatherForecastRequest {
+    let city: String
+    
+    var identifier: AnyHashable {
+        AnyHashable(city)
+    }
+    
+    func cancel() {
+        // Do nothing
+    }
+}
+
 struct DummyWeatherForecastClient: WeatherForecastClient {
     func getWeatherForecasts(
         for city: String,
         completionHandler: @escaping (Result<OpenWeatherMapResponse, WeatherForecastClientError>) ->
             Void
-    ) {
+    ) -> WeatherForecastRequest {
         let response = OpenWeatherMapResponse(
             city: .init(id: 1009, name: city),
             forecasts: [
@@ -37,6 +49,7 @@ struct DummyWeatherForecastClient: WeatherForecastClient {
         )
 
         completionHandler(.success(response))
+        return DummyWeatherForecastRequest(city: city)
     }
 
     func weatherIconUrl(forIdentifier id: String) -> URL {
@@ -62,7 +75,7 @@ final class WeatherForecastStoreTests: XCTestCase {
 
         let expectation = expectation(description: "Response transformed correctly")
 
-        store.fetchWeatherForecasts(for: "saigon") { result in
+        _ = store.fetchWeatherForecasts(for: "saigon") { result in
             switch result {
             case .success(let models):
                 XCTAssertEqual(models.count, 1)
