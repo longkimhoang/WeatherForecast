@@ -21,6 +21,12 @@ jobs:
     
     - name: Download buck
       run: make install_buck
+
+    - name: Cache buck
+      uses: actions/cache@v2
+      with:
+        key: https://jitpack.io/com/github/airbnb/buck/f2865fec86dbe982ce1f237494f10b65bce3d270/buck-f2865fec86dbe982ce1f237494f10b65bce3d270-java11.pex
+        path: tools/buck
       
     - name: Run tests
       run: make test
