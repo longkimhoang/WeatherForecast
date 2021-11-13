@@ -56,6 +56,14 @@ The main modules are:
 -   [Swinject](https://github.com/Swinject/Swinject): Provides dependency injection for the application.
 -   [DiffableDataSources](https://github.com/ra1028/DiffableDataSources): A backport of Apple's `UITableViewDiffableDataSource` (iOS 13.0+) for iOS 9.0+, which provides a data source that can compute inserts/deletes/moves efficiently and less error-prone than traditional `performBatchUpdates`.
 
+## Continuous Integration (CI)
+
+This project is configured with [GitHub Actions](https://github.com/features/actions), which will run tests automatically on every push.
+
+Below is the output of an example run, which is triggered on a push:
+
+![GitHub Action](https://i.imgur.com/RWId8mP.png)
+
 ## Checklist
 
 -   ~~Programming language: Swift is required, Objective-C is optional.~~
