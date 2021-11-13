@@ -1,5 +1,7 @@
 # Weather Forecast Example Application
 
+[![Makefile CI](https://github.com/longkh158/WeatherForecast/actions/workflows/makefile.yml/badge.svg?branch=master)](https://github.com/longkh158/WeatherForecast/actions/workflows/makefile.yml)
+
 Author: Long Kim
 
 This repo contains the source code for a simple weather forecast application with data provided from [OpenWeatherMap](https://openweathermap.org).
