@@ -30,10 +30,17 @@ jobs:
       run: make install_buck
       if: steps.cache-buck.outputs.cache-hit != 'true'
       
-    - name: Cache buck build output
-      uses: actions/cache@v2
+    - name: Download buck build artifacts
+      uses: actions/upload-artifact@v2
       with:
+        name: buck-artifacts
         path: buck-out
       
     - name: Run tests
       run: make test
+      
+    - name: Upload buck build artifacts
+      uses: actions/download-artifacts@v2
+      with:
+        name: buck-artifacts
+        path: buck-out
