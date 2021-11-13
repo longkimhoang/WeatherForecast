@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct OpenWeatherMapRequestParameters: Encodable {
+public struct OpenWeatherMapRequestParameters: Encodable, Hashable {
     public enum TemperatureUnit: String, Encodable {
         case `default` = "kelvin"
         case metric = "metric"

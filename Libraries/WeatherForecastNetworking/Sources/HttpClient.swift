@@ -11,6 +11,9 @@ import Foundation
 /// A type representing a HTTP client error.
 public typealias HttpClientError = AFError
 
+/// A type representing a HTTP client request.
+public typealias HttpClientRequest = DataRequest
+
 /// A type representing a HTTP client response.
 public typealias HttpClientResponse<T: Decodable> = DataResponse<T, HttpClientError>
 
@@ -21,12 +24,13 @@ public typealias URLConvertible = Alamofire.URLConvertible
 /// performs response deserialization.
 public protocol HttpClient {
     /// Performs a `GET` request.
-    func get<U: URLConvertible, P: Encodable, T: Decodable>(
+    @discardableResult func get<U, P, T>(
         _ url: U,
         parameters: P,
         of type: T.Type,
         completionHandler: @escaping (HttpClientResponse<T>) -> Void
-    )
+    ) -> HttpClientRequest
+    where U: URLConvertible, P: Encodable, T: Decodable
 }
 
 /// An ``HttpClient`` that uses `Alamofire` to perform requests.
@@ -47,7 +51,8 @@ public struct AlamoFireHTTPClient: HttpClient {
         parameters: P,
         of type: T.Type,
         completionHandler: @escaping (HttpClientResponse<T>) -> Void
-    ) where U: URLConvertible, P: Encodable, T: Decodable {
+    ) -> HttpClientRequest
+    where U: URLConvertible, P: Encodable, T: Decodable {
         AF.request(url, parameters: parameters)
             .validate(statusCode: 200..<300)
             .responseDecodable(

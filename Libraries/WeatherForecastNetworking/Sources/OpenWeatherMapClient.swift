@@ -14,17 +14,29 @@ public enum WeatherForecastClientError: Error {
     /// The forecast data matching the request was not found.
     case notFound(message: String?)
 
+    /// A request was cancelled by the client.
+    case requestCancelled(identifier: AnyHashable)
+
     /// Internal HTTP client error.
     case httpClientError(underlyingError: HttpClientError)
 }
 
+/// A request for weather forecast data.
+public protocol WeatherForecastRequest {
+    /// The stable identifier of the request.
+    var identifier: AnyHashable { get }
+
+    /// Cancels the request.
+    func cancel()
+}
+
 /// A type that perform requests to obtain weather forecasts.
 public protocol WeatherForecastClient {
-    func getWeatherForecasts(
+    @discardableResult func getWeatherForecasts(
         for city: String,
         completionHandler: @escaping (Result<OpenWeatherMapResponse, WeatherForecastClientError>) ->
             Void
-    )
+    ) -> WeatherForecastRequest
 
     func weatherIconUrl(forIdentifier id: String) -> URL
 }
@@ -40,14 +52,18 @@ public struct OpenWeatherMapClient: WeatherForecastClient {
         self.httpClient = httpClient
     }
 
-    public func getWeatherForecasts(
+    @discardableResult public func getWeatherForecasts(
         for city: String,
         completionHandler: @escaping (Result<OpenWeatherMapResponse, WeatherForecastClientError>) ->
             Void
-    ) {
+    ) -> WeatherForecastRequest {
         let parameters = OpenWeatherMapRequestParameters(city: city)
 
-        httpClient.get(baseUrl, parameters: parameters, of: OpenWeatherMapResponse.self) {
+        let request = httpClient.get(
+            baseUrl,
+            parameters: parameters,
+            of: OpenWeatherMapResponse.self
+        ) {
             response in
 
             let result = response.result.mapError { error -> WeatherForecastClientError in
@@ -68,6 +84,10 @@ public struct OpenWeatherMapClient: WeatherForecastClient {
                     }
 
                     return WeatherForecastClientError.notFound(message: nil)
+                case HttpClientError.explicitlyCancelled:
+                    return WeatherForecastClientError.requestCancelled(
+                        identifier: AnyHashable(parameters)
+                    )
                 default:
                     return WeatherForecastClientError.httpClientError(underlyingError: error)
                 }
@@ -75,6 +95,8 @@ public struct OpenWeatherMapClient: WeatherForecastClient {
 
             completionHandler(result)
         }
+
+        return Request(identifier: parameters, request: request)
     }
 
     public func weatherIconUrl(forIdentifier id: String) -> URL {
@@ -82,5 +104,26 @@ public struct OpenWeatherMapClient: WeatherForecastClient {
         let iconPath = "\(id)@2x.png"
 
         return baseUrl.appendingPathComponent(iconPath)
+    }
+}
+
+extension OpenWeatherMapClient {
+    /// A RAII wrapper for the ``HttpClientRequest`` the underlying HTTP client makes.
+    final class Request: WeatherForecastRequest {
+        let identifier: AnyHashable
+        weak var request: HttpClientRequest?
+
+        init<ID: Hashable>(identifier: ID, request: HttpClientRequest) {
+            self.identifier = AnyHashable(identifier)
+            self.request = request
+        }
+
+        func cancel() {
+            request?.cancel()
+        }
+
+        deinit {
+            cancel()
+        }
     }
 }

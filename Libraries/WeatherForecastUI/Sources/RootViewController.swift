@@ -10,7 +10,6 @@ import Foundation
 import Toast
 import UIKit
 import WeatherForecastCore
-import WeatherForecastNetworking
 
 public final class RootViewController: UIViewController {
     enum Section { case main }
@@ -122,7 +121,7 @@ extension RootViewController: WeatherForecastViewDataProvidingDelegate {
         view.hideToastActivity()
         
         switch error {
-        case WeatherForecastClientError.notFound(let message):
+        case WeatherForecastDataProviderError.cityNotFound(_, let message):
             showNotFoundErrorScreen(message: message)
         default:
             showGenericErrorScreen(error: error)

@@ -11,9 +11,9 @@ import WeatherForecastCore
 
 public protocol WeatherForecastViewDataProviding: AnyObject {
     var forecastDataProvider: WeatherForecastDataProviding { get }
-    
+
     var weatherIconProvider: WeatherIconProviding { get }
-    
+
     var delegate: WeatherForecastViewDataProvidingDelegate? { get set }
 
     func fetchWeatherForecasts(for city: String)
@@ -44,6 +44,9 @@ public final class WeatherForecastViewModel: WeatherForecastViewDataProviding {
     public let weatherIconProvider: WeatherIconProviding
     weak public var delegate: WeatherForecastViewDataProvidingDelegate?
 
+    private var lastSearchText: String?
+    private var currentRequest: (city: String, request: WeatherForecastDataProviding.Request)?
+
     public init(
         forecastDataProvider: WeatherForecastDataProviding,
         weatherIconProvider: WeatherIconProviding
@@ -53,12 +56,32 @@ public final class WeatherForecastViewModel: WeatherForecastViewDataProviding {
     }
 
     public func fetchWeatherForecasts(for city: String) {
+        guard city.count >= 3 else {
+            return
+        }
+        
+        if let currentRequest = currentRequest, currentRequest.city == city {
+            // Skip identical requests.
+            return
+        }
+        
+        if let lastSearchText = lastSearchText, lastSearchText == city {
+            // Skip identical search text.
+            return
+        }
+        
+        lastSearchText = city
+
         delegate?.weatherForecastDataProviderDidBeginFetching(self)
 
-        forecastDataProvider.fetchWeatherForecasts(for: city) { [weak self] result in
+        let request = forecastDataProvider.fetchWeatherForecasts(for: city) {
+            [weak self] result in
             guard let self = self else {
                 return
             }
+            
+            // Clean up when done.
+            defer { self.currentRequest = nil }
 
             switch result {
             case .success(let forecasts):
@@ -68,6 +91,8 @@ public final class WeatherForecastViewModel: WeatherForecastViewDataProviding {
                         didUpdateForecastDataWith: forecasts
                     )
                 }
+            case .failure(WeatherForecastDataProviderError.requestCancelled):
+                break
             case .failure(let error):
                 DispatchQueue.main.async {
                     self.delegate?.weatherForecastDataProvider(
@@ -77,6 +102,10 @@ public final class WeatherForecastViewModel: WeatherForecastViewDataProviding {
                 }
             }
         }
+        
+        // Store request so we can ignore identical requests, and cancel
+        // the current one when a different request comes.
+        currentRequest = (city, request)
     }
 
     public func getWeatherIcon(forIdentifier id: String) -> UIImage? {
