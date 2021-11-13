@@ -30,5 +30,10 @@ jobs:
       run: make install_buck
       if: steps.cache-buck.outputs.cache-hit != 'true'
       
+    - name: Cache buck build output
+      uses: actions/cache@v2
+      with:
+        path: buck-out
+      
     - name: Run tests
       run: make test
