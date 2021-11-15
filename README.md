@@ -66,10 +66,10 @@ Below is the output of an example run, which is triggered on a push:
 
 ## Checklist
 
--   ~~Programming language: Swift is required, Objective-C is optional.~~
--   ~~Design app's architecture (MVC or MVP, MVVM).~~
--   ~~UI should be looks like in attachment.~~
--   Write UnitTests (nice to have).
+-   [x] Programming language: Swift is required, Objective-C is optional.
+-   [x] Design app's architecture (MVC or MVP, MVVM).
+-   [x] UI should be looks like in attachment.
+-   [ ] Write UnitTests (nice to have).
 
     -   Networking Code
     -   Weather Forecast Fetching Logic
@@ -78,5 +78,5 @@ Below is the output of an example run, which is triggered on a push:
     Current coverage:
     ![Coverage](docs/coverage.png)
 
--   ~~Exception handling (optional).~~ The app can handle cases where city is not found, and a generic error case.
--   ~~`README` file is included.~~
+-   [x] Exception handling (optional). The app can handle cases where city is not found, and a generic error case.
+-   [x] `README` file is included.
